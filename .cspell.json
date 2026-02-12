@@ -20,7 +20,8 @@
         "pykakasi",
         "stresser",
         "onnx",
-        "diacritization"
+        "diacritization",
+        "venv"
     ],
     "ignorePaths": [
         "node_modules",
