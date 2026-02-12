@@ -1,0 +1,32 @@
+{
+    "version": "0.2",
+    "language": "en",
+    "words": [
+        "Eburon",
+        "Maximus",
+        "pgcrypto",
+        "shadcn",
+        "Vercel",
+        "Eburon",
+        "Maximus",
+        "numpy",
+        "resampy",
+        "librosa",
+        "omegaconf",
+        "silero",
+        "safetensors",
+        "spacy",
+        "pkuseg",
+        "pykakasi",
+        "stresser",
+        "onnx",
+        "diacritization"
+    ],
+    "ignorePaths": [
+        "node_modules",
+        ".git",
+        ".next",
+        "package-lock.json",
+        "bun.lock"
+    ]
+}

@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# build output
+dist/
+build/
+coverage/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env files (keep example)
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+*.tsbuildinfo
+
+# IDEs/editors
+.idea/
+.vscode/
+.cursor/
+
+# tooling caches
+.turbo/
+.vercel/
+.swc/
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+
+Chatterbox-Multilingual-TTS/env/
