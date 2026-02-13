@@ -1,0 +1,1609 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Eburon Caller">
+    <title>Eburon Caller - CRM Dashboard</title>
+    <script srchttps://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 /0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+ [data-theme="dark"] {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb( 0 0 / 0.4);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity 0.4;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            top: 40%;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent);
+            bottom: -50px;
+            left: 30%;
+            animation-delay: -10s;
+            opacity: 0.2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        Layout */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar (Desktop) */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: none;
+            flex: column;
+            z-index: 100;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-section {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .sidebar-footer            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-card:hover {
+            background: var(--border);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Main */
+        .main-content {
+            flex: 1;
+            margin-left: 0;
+            width: 100%;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 50;
+            transition: background-color 0.3s ease;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .menu-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--surface);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--surface);
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 20px;
+            max-width: 1280px;
+            margin: 0;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .stat-card.success::before { background: var(--success); }
+        .stat-card.warning::before { background: var(--warning); }
+        .stat-card.danger::before { background: var(--danger); }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+ justify-content: center;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-card.success .stat-icon { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-card.warning .stat-icon { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .stat-card.danger .stat-icon { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px        }
+
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--danger); }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Lists */
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            cursor pointer;
+            transition: all 0.2s ease;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: var(--bg);
+            margin: 0 -20px;
+            padding-left: 36px;
+            padding-right: 36px;
+        }
+
+        .list-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .list-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .list-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+ text-overflow: ellipsis;
+        }
+
+        .list-meta {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .list-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-badge.completed {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .status-badge.missed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Action Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+       btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+ }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        /* Search */
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+ justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width:32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translate(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--surface);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            animation: slideUp 0.3s;
+            border: 1px solid var(--border);
+            pointer-events: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.info { border-left: 4px solid var(--info); }
+
+        /* Bottom Nav (Mobile) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 999;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 100%;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+        }
+
+        .nav-tab i {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-tab.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-tab span {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 100%;
+            gap: 8px;
+        }
+
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+            position: relative;
+            min-height: 4px;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight 700;
+            color: var(--text);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bar:hover .bar-value {
+            opacity: 1;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            width: 48px;
+            height: 26px;
+            background: var(--border);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle.active {
+            background: var(--primary);
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle.active .toggle-circle {
+            transform: translateX(px);
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .setting-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Call Controls */
+ .call-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .call-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .call-btn.answer {
+            background: var(--success);
+            color: white;
+ }
+
+        .call-btn.hangup {
+            background: var(--danger);
+            color: white;
+        }
+
+        .call-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .content {
+                padding: 32px;
+            }
+
+            .header {
+                padding: 20px 32px;
+            }
+        }
+
+        @media (min-width: 1024) {
+            .sidebar {
+                display: flex;
+            }
+
+            .main-content {
+                margin-left: 280px;
+            }
+
+            .menu-btn {
+                display: none;
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+
+            body {
+                padding-bottom: 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .header-right .icon-btn:not(.notifications) {
+                display: none;
+            }
+
+            .stats-grid {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+ .stat-value {
+                font-size: 20px;
+            }
+        }
+
+        /* Animations */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1 }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar (Desktop) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i data-lucide="phone-call"></i>
+                </div>
+                <div class="logo-text">Eburon Caller</div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-item active" onclick="navigateTo('dashboard')">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('calls')">
+                    <i data-lucide="phone"></i>
+                    <span>Active Calls</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('contacts')">
+                    <i data-lucide="users"></i>
+                    <span>Contacts</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('analytics')">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Analytics</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('settings')">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="-card" onclick="toggleTheme()">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-info">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role">Senior Agent</div>
+                    </div>
+                    <i data-lucide="moon" ```html
+                    ></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <h1 class="page-title">Dashboard</h1>
+                </div>
+
+                <div class="header-right">
+                    <button class="icon-btn notifications" aria-label="Notifications">
+                        <i data-lucide="bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="icon-btn" aria-label="Search">
+                        <i data-lucide="search"></i>
+                    </button>
+                    <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                        <i data-lucide="moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Sections -->
+            <section class="content section active" id="dashboard">
+                <!-- Stats Overview -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-label">Total Calls</div>
+                            <div class="stat-icon"><i data-lucide="phone-outgoing"></i></div>
+                        </div>
+                        <div class="stat-value">1,842</div>
+                        <div class="stat-change positive"><i data-lucide="arrow-up"></i> 12.4%</div>
+                    </div>
+
+                    <div class="stat-card success">
+                        <div class="stat-header">
+                            <div class="stat-label">Answered</div>
+                            <div class="stat-icon"><i data-lucide="check-circle"></i></div>
+                        </div>
+                        <div class="stat-value">1,576</div>
+                        <div class="stat-change positive"><i data-lucide="arrow-up"></i> 8.1%</div>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <div class="stat-header">
+                            <div class="stat-label">Missed</div>
+                            <div class="stat-icon"><i data-lucide="x-circle"></i></div>
+                        </div>
+                        <div class="stat-value">178</div>
+                        <div class="stat-change negative"><i data-lucide="arrow-down"></i> 3.2%</div>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <div class="stat-header">
+                            <div class="stat-label">Failed</div>
+                            <div class="stat-icon"><i data-lucide="alert-circle"></i></div>
+                        </div>
+                        <div class="stat-value">88</div>
+                        <div class="stat-change negative"><i data-lucide="arrow-down"></i> 1.9%</div>
+                    </div>
+                </div>
+
+                <!-- Recent Calls -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i data-lucide="list"></i> Recent Calls</h2>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('call')">
+                            <i data-lucide="plus"></i> New Call
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-box">
+                            <input type="text" class="search-input" placeholder="Search calls...">
+                            <i class="search-icon" data-lucide="search"></i>
+                        </div>
+
+                        <div class="list-item">
+                            <div class="list-avatar"><i data-lucide="phone"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Acme Corp – John Smith</div>
+                                <div class="list-subtitle">+1 (555) 123‑4567 • 2 min 30 s</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">09:12 AM</div>
+                                <span class="status-badge completed"><i data-lucide="check"></i> Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="list-item">
+                            <div class="list-avatar"><i data-lucide="phone"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">GlobalTech – Maria Garcia</div>
+                                <div class="list-subtitle">+44 (20) 7946 0958 • 1 min 04 s</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">08:45 AM</div>
+                                <span class="status-badge missed"><i data-lucide="x"></i> Missed</span>
+                            </div>
+                        </div>
+
+                        <div class="list-item">
+                            <div class="list-avatar"><i data-lucide="phone"></i></div>
+                            <div class="list-content">
+                                <div class="list-title">Beta Ltd – Ahmed Khan</div>
+                                <div class="list-subtitle">+91 (22) 2567 8910 • 3 min 12 s</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">08:10 AM</div>
+                                <span class="status-badge active"><i data-lucide="check-circle"></i> Answered</span>
+                            </div>
+                        </div>
+
+                        <div class="empty-state" id="noCalls" style="display:none;">
+                            <div class="empty-icon"><i data-lucide="inbox"></i></div>
+                            <h3 class="empty-title">No recent calls</h3>
+                            <p class="empty-text">Your call history will appear here.</p>
+                            <button class="btn btn-primary" onclick="openModal('call')">
+                                <i data-lucide="phone"></i> Start a Call
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contacts -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i data-lucide="users"></i> Top Contacts</h2>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('contact')">
+                            <i data-lucide="user-plus"></i> Add Contact
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-item">
+                            <div class="list-avatar">AB</div>
+                            <div class="list-content">
+                                <div class="list-title">Alice Brown</div>
+                                <div class="list-subtitle">+1 (555) 987‑6543 • acme@example.com</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">15 calls</div>
+                                <button class="btn btn-sm btn-secondary" onclick="openModal('contact')">
+                                    <i data-lucide="edit-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="list-item">
+                            <div class="list-avatar">MS</div>
+                            <div class="list-content">
+                                <div class="list-title">Mohamed Samir</div>
+                                <div class="list-subtitle">+20 (2) 123 4567 • moh@global.com</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">12 calls</div>
+                                <button class="btn btn-sm btn-secondary" onclick="openModal('contact')">
+                                    <i data-lucide="edit-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="list-item">
+                            <div class="list-avatar">JC</div>
+                            <div class="list-content">
+                                <div class="list-title">John Carter</div>
+                                <div class="list-subtitle">+44 (20) 7946 0777 • john.c@beta.co</div>
+                            </div>
+                            <div class="list-meta">
+                                <div class="list-time">9 calls</div>
+                                <button class="btn btn-sm btn-secondary" onclick="openModal('contact')">
+                                    <i data-lucide="edit-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="empty-state" id="noContacts" style="display:none;">
+                            <div class="empty-icon"><i data-lucide="user"></i></div>
+                            <h3 class="empty-title">No contacts yet</h3>
+                            <p class="empty-text">Add contacts to quickly start calls.</p>
+                            <button class="btn btn-primary" onclick="openModal('contact')">
+                                <i data-lucide="user-plus"></i> Add Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Placeholder sections for other pages -->
+            <section class="content section" id="calls">
+                <h2 class="page-title">Active Calls</h2>
+                <p class="text-muted">Feature coming soon…</p>
+            </section>
+
+            <section class="content section" id="contacts">
+                <h2 class="page-title">All Contacts</h2>
+                <p class="text-muted">Feature coming soon…</p>
+            </section>
+
+            <section class="content section" id="analytics">
+                <h2 class="page-title">Analytics</h2>
+                <p class="text-muted">Feature coming soon…</p>
+            </section>
+
+            <section class="content section" id="settings">
+                <h2 class="page-title">Settings</h>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><i data-lucide="sliders"></i> Preferences</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Dark Mode</h4>
+                                <p>Toggle between light and dark themes.</p>
+                            </div>
+                            <div class="toggle" id="themeToggleSwitch" onclick="toggleTheme()">
+                                <div class="div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Notifications</h4>
+                                <p>Enable desktop notifications for incoming calls.</p>
+                            </div>
+                            <div class="toggle" id="notifyToggle">
+                                <div class="toggle-circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-tab active" data-target="dashboard" onclick="mobileNavigate(this)">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+        </button>
+        <button class="nav-tab" data-target="calls" onclick="mobileNavigate(this)">
+            <i data-lucide="phone"></i>
+            <span>Calls</span>
+        </button>
+        <button class="nav-tab" data-target="contacts" onclick="mobileNavigate(this)">
+            <i data-lucide="users"></i>
+            <span></span>
+        </button>
+        <button class="nav-tab" data-target="analytics" onclick="mobileNavigate(this)">
+            <i data-lucide="bar-chart-3"></i>
+            <span>Analytics</span>
+        </button>
+        <button class="nav-tab" data-target="settings" onclick="mobileNavigate(this)">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="" id="modal">
+            <header class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </header>
+            <section class="modal-body" id="modalBody">
+                <!-- Dynamic content injected by JS -->
+            </section>
+            <footer class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirm</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Toasts -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialise icons
+        lucide.createIcons();
+
+        // --------- Theme handling ----------
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleSwitch = document.getElementById('themeToggleSwitch');
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeToggleSwitch.classList.toggle('active', theme === 'dark');
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // --------- Sidebar toggle (mobile) ----------
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+
+        menuBtn?.addEventListener('click', () => {
+            const isOpen = sidebar.style.transform === 'translateX(0px)';
+            sidebar.style.transform = isOpen ? 'translateX(-280px)' : 'translateX(0)';
+        });
+
+        // --------- Navigation ----------
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item');
+        const bottomTabs = document.querySelectorAll('.nav-tab');
+
+        function navigateTo(id) {
+            sections.forEach(s => s.classList.toggle('active', s.id === id));
+            navItems.forEach(i => i.classList.toggle('active', i.getAttribute('onclick').includes(id)));
+            bottomTabs.forEach(t => t.classList.toggle('active', t.dataset.target === id));
+        }
+
+        function mobileNavigate(el) {
+            const target = el.dataset.target;
+            navigateTo(target);
+        }
+
+        // --------- Modal handling ----------
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalConfirm = document.getElementById('modalConfirm');
+
+        function openModal(type) {
+            modalOverlay.classList.add('active');
+            if (type === 'call') {
+                modalTitle.textContent = 'Start New Call';
+                modalBody.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Contact / Number</label>
+                        <input type="text" class="form-input" placeholder="+1 (555) 123‑4567">
+                    </div>
+                    <div class="form-group">
+                        <label class="-label">Call Purpose</label>
+                        <input type="text" class="form-input" placeholder="e.g. Follow‑up, Demo">
+                    </div>
+                `;
+                modalConfirm.onclick = () => {
+                    showToast('success', 'Calling...');
+                    closeModal();
+                };
+            } else if (type === 'contact') {
+                modalTitle.textContent = 'Add / Edit Contact';
+                modalBody.innerHTML = `
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" class="form-input" placeholder="+1 (555) 987‑6543">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email (optional)</label>
+                        <input type="email" class="form-input" placeholder="john@example.com">
+                    </div>
+                `;
+                modalConfirm.onclick = () => {
+                    showToast('success', 'Contact saved');
+                    closeModal();
+                };
+            }
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+        }
+
+        // --------- Toasts ----------
+        const toastContainer = document.getElementById('toastContainer');
+
+        function showToast(type, message, duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check' : type === 'error' ? 'x' : 'info'}"></i> ${message}`;
+            toastContainer.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.remove();
+            }, duration);
+        }
+
+        // Demo toast on load
+        // showToast('info', 'Welcome to Eburon Caller!');
+
+        // --------- Demo data visibility ----------
+        // Hide empty state messages when there is data
+        document.getElementById('noCalls').style.display = 'none';
+        document.getElementById('noContacts').style.display = 'none';
+    </script>
+</body>
+</html>
